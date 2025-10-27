@@ -6,6 +6,13 @@ class BallotNumber(namedtuple('BallotNumber',['round','leader_id'])):
   __slots__ = ()
   def __str__(self):
     return "BN(%d,%s)" % (self.round, str(self.leader_id))
+  
+  def __lt__(self, other):
+    if self.round < other.round:
+      return True
+    if self.round == other.round:
+      return self.leader_id < other.leader_id
+    return False
 
 class PValue(namedtuple('PValue',['ballot_number',
                                   'slot_number',
