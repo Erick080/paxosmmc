@@ -34,11 +34,11 @@ class Acceptor(Process):
         s, c). The acceptor returns to the leader a p2b response
         message containing its current ballot number.
         """
-        print "Here I am: ", self.id
+        print("Here I am: ", self.id)
         while True:
             msg = self.getNextMessage()
             if isinstance(msg, P1aMessage):
-                if msg.ballot_number > self.ballot_number:
+                if self.ballot_number is None or msg.ballot_number > self.ballot_number:
                     self.ballot_number = msg.ballot_number
                 self.sendMessage(msg.src, P1bMessage(self.id, self.ballot_number, self.accepted))
             elif isinstance(msg, P2aMessage):

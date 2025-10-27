@@ -32,5 +32,5 @@ class Scout(Process):
             self.sendMessage(self.leader, PreemptedMessage(self.me, msg.ballot_number))
             return
         else:
-          print "Scout: unexpected msg"
+          print("Scout: unexpected msg")
 

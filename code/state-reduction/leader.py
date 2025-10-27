@@ -16,7 +16,7 @@ class Leader(Process):
         self.env.addProc(self)
 
     def body(self):
-        print "Here I am: ", self.me
+        print("Here I am: ", self.me)
 
         Scout(self.env, "scout:%s:%s" % (str(self.me), str(self.ballot_number)),
               self.me, self.config.acceptors, self.ballot_number)
@@ -51,4 +51,4 @@ class Leader(Process):
                     Scout(self.env, "scout:%s:%s" % (str(self.me), str(self.ballot_number)),
                           self.me, self.config.acceptors, self.ballot_number)
             else:
-                print "Leader: unknown msg type"
+                print("Leader: unknown msg type")

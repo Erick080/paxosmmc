@@ -11,7 +11,7 @@ class Process(Thread):
       self.body()
       self.env.removeProc(self.me)
     except EOFError:
-      print "Exiting.."
+      print("Exiting..")
 
   def getNextMessage(self):
     return self.inbox.get()

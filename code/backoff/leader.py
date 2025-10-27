@@ -46,7 +46,7 @@ class Leader(Process):
         the current ballot number of the leader, it may no longer be
         possible to use the current ballot number to choose a command.
         """
-        print "Here I am: ", self.id
+        print("Here I am: ", self.id)
         Scout(self.env, "scout:%s:%s" % (str(self.id), str(self.ballot_number)),
                     self.id, self.config.acceptors, self.ballot_number)
         while True:
@@ -65,7 +65,7 @@ class Leader(Process):
                 # be competing with another leader.
                 if self.timeout > TIMEOUTSUBTRACT:
                     self.timeout = self.timeout - TIMEOUTSUBTRACT
-                    print self.id, "Timeout decreased: ", self.timeout
+                    print(self.id, "Timeout decreased: ", self.timeout)
                 if self.ballot_number == msg.ballot_number:
                     pmax = {}
                     # For every slot number add the proposal with
@@ -90,7 +90,7 @@ class Leader(Process):
                 if msg.ballot_number.leader_id > self.id:
                     # Increase timeout because the other leader has priority
                     self.timeout = self.timeout * TIMEOUTMULTIPLY
-                    print self.id, "Timeout increased: ", self.timeout
+                    print(self.id, "Timeout increased: ", self.timeout)
                 if msg.ballot_number > self.ballot_number:
                     self.active = False
                     self.ballot_number = BallotNumber(msg.ballot_number.round+1,
@@ -100,5 +100,5 @@ class Leader(Process):
                           self.id, self.config.acceptors, self.ballot_number)
 
             else:
-                print "Leader: unknown msg type"
+                print("Leader: unknown msg type")
             sleep(self.timeout)

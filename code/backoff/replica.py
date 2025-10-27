@@ -36,7 +36,7 @@ class Replica(Process):
                 if isinstance(self.decisions[self.slot_in-WINDOW], ReconfigCommand):
                     r,a,l = self.decisions[self.slot_in-WINDOW].config.split(';')
                     self.config = Config(r.split(','), a.split(','), l.split(','))
-                    print self.id, ": new config:", self.config
+                    print(self.id, ": new config:", self.config)
             if self.slot_in not in self.decisions:
                 cmd = self.requests.pop(0)
                 self.proposals[self.slot_in] = cmd
@@ -63,7 +63,7 @@ class Replica(Process):
         if isinstance(cmd, ReconfigCommand):
             self.slot_out += 1
             return
-        print self.id, ": perform", self.slot_out, ":", cmd
+        print(self.id, ": perform", self.slot_out, ":", cmd)
         self.slot_out += 1
 
     def body(self):
@@ -86,7 +86,7 @@ class Replica(Process):
         returns it to set requests so it can be proposed again at a
         later time. Next, the replica invokes perform().
         """
-        print "Here I am: ", self.id
+        print("Here I am: ", self.id)
         while True:
             msg = self.getNextMessage()
             if isinstance(msg, RequestMessage):
@@ -100,5 +100,5 @@ class Replica(Process):
                         del self.proposals[self.slot_out]
                     self.perform(self.decisions[self.slot_out])
             else:
-                print "Replica: unknown msg type"
+                print("Replica: unknown msg type")
             self.propose()

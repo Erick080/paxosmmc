@@ -27,7 +27,7 @@ class Replica(Process):
               isinstance(self.decisions[self.slot_in-WINDOW], ReconfigCommand):
         r,a,l = self.decisions[self.slot_in-WINDOW].config.split(';')
         self.config = Config(r.split(','),a.split(','),l.split(','))
-        print self.me, ": updated config:", self.decisions[self.slot_in-WINDOW].config
+        print(self.me, ": updated config:", self.decisions[self.slot_in-WINDOW].config)
 
   def perform(self, command):
     for s in range(1, self.slot_out):
@@ -37,11 +37,11 @@ class Replica(Process):
     if isinstance(command, ReconfigCommand):
       self.slot_out += 1
       return
-    print self.me, ": perform (%d,%s)" % (self.slot_out-1,command)
+    print(self.me, ": perform (%d,%s)" % (self.slot_out-1,command))
     self.slot_out += 1
 
   def body(self):
-    print "Here I am: ", self.me
+    print("Here I am: ", self.me)
     while True:
       msg = self.getNextMessage()
       if isinstance(msg, RequestMessage):
@@ -55,5 +55,5 @@ class Replica(Process):
             del self.proposals[self.slot_out]
           self.perform(self.decisions[self.slot_out])
       else:
-        print "Replica: unknown msg type"
+        print("Replica: unknown msg type")
       self.propose()

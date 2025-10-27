@@ -14,7 +14,7 @@ class Leader(Process):
     self.env.addProc(self)
 
   def body(self):
-    print("Here I am: ", self.id)
+    print("Here I am, a leader: ", self.id)
     Scout(self.env, "scout:%s:%s" % (str(self.id), str(self.ballot_number)),
           self.id, self.config.acceptors, self.ballot_number)
     while True:

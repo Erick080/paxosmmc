@@ -58,5 +58,5 @@ class Scout(Process):
                                                       msg.ballot_number))
                     return
             else:
-                print "Scout: unexpected msg"
+                print("Scout: unexpected msg")
 

@@ -13,7 +13,7 @@ class Acceptor(Process):
     self.env.addProc(self)
 
   def body(self):
-    print "Here I am: ", self.me
+    print("Here I am: ", self.me)
     while True:
       msg = self.getNextMessage()
       if isinstance(msg, P1aMessage):
