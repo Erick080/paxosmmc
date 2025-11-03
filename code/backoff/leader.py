@@ -55,18 +55,22 @@ class Leader(Process):
                 if msg.slot_number not in self.proposals:
                     self.proposals[msg.slot_number] = msg.command
                     if self.active:
+                        print(f"LEADER {self.id}: [ATIVO] Propondo comando para slot {msg.slot_number} (Ballot: {self.ballot_number})")
                         Commander(self.env,"commander:%s:%s:%s" % (str(self.id),
                                                                    str(self.ballot_number),
                                                                    str(msg.slot_number)),
                                   self.id, self.config.acceptors, self.config.replicas,
                                   self.ballot_number, msg.slot_number, msg.command)
+                    else:
+                        print(f"LEADER {self.id}: [INATIVO] Não pode propor comando para slot {msg.slot_number} (Ballot: {self.ballot_number})")
             elif isinstance(msg, AdoptedMessage):
                 # Decrease timeout since the leader does not seem to
                 # be competing with another leader.
                 if self.timeout > TIMEOUTSUBTRACT:
                     self.timeout = self.timeout - TIMEOUTSUBTRACT
-                    print(self.id, "Timeout decreased: ", self.timeout)
+                    print(f"LEADER {self.id}: Timeout decreased: {self.timeout}")
                 if self.ballot_number == msg.ballot_number:
+                    print(f"LEADER {self.id}: Adotado ballot {self.ballot_number}")
                     pmax = {}
                     # For every slot number add the proposal with
                     # the highest ballot number to proposals
@@ -85,20 +89,25 @@ class Leader(Process):
                                   self.id, self.config.acceptors, self.config.replicas,
                                   self.ballot_number, sn, self.proposals.get(sn))
                     self.active = True
+                else:
+                    print(f"LEADER {self.id}: ignorada. (Meu ballot é {self.ballot_number}, msg foi {msg.ballot_number})")
             elif isinstance(msg, PreemptedMessage):
                 # The leader is competing with another leader
                 if msg.ballot_number.leader_id > self.id:
                     # Increase timeout because the other leader has priority
                     self.timeout = self.timeout * TIMEOUTMULTIPLY
-                    print(self.id, "Timeout increased: ", self.timeout)
+                    print(f"LEADER {self.id}: Timeout increased: {self.timeout}")
                 if msg.ballot_number > self.ballot_number:
+                    print(f"LEADER {self.id}: Preemptado por ballot {msg.ballot_number}")
                     self.active = False
                     self.ballot_number = BallotNumber(msg.ballot_number.round+1,
                                                       self.id)
+                    print(f"LEADER {self.id}: TENTANDO NOVAMENTE. Novo ballot: {self.ballot_number}.")
                     Scout(self.env, "scout:%s:%s" % (str(self.id),
                                                      str(self.ballot_number)),
                           self.id, self.config.acceptors, self.ballot_number)
-
+                else:
+                    print(f"LEADER {self.id}: Preempção ignorada. (Meu ballot é {self.ballot_number}, msg foi {msg.ballot_number})")
             else:
                 print("Leader: unknown msg type")
             sleep(self.timeout)
