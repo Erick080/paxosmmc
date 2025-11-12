@@ -86,13 +86,14 @@ class Replica(Process):
         returns it to set requests so it can be proposed again at a
         later time. Next, the replica invokes perform().
         """
-        print("Here I am: ", self.id)
+        #print("Here I am: ", self.id)
         while True:
             msg = self.getNextMessage()
             if isinstance(msg, RequestMessage):
                 self.requests.append(msg.command)
             elif isinstance(msg, DecisionMessage):
                 self.decisions[msg.slot_number] = msg.command
+                print(f"[replica] recebi decisao {msg.command} para slot {msg.slot_number}")
                 while self.slot_out in self.decisions:
                     if self.slot_out in self.proposals:
                         if self.proposals[self.slot_out] != self.decisions[self.slot_out]:

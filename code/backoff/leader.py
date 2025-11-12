@@ -46,7 +46,7 @@ class Leader(Process):
         the current ballot number of the leader, it may no longer be
         possible to use the current ballot number to choose a command.
         """
-        print("Here I am: ", self.id)
+        #print("Here I am: ", self.id)
         Scout(self.env, "scout:%s:%s" % (str(self.id), str(self.ballot_number)),
                     self.id, self.config.acceptors, self.ballot_number)
         while True:

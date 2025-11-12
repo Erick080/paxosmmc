@@ -41,7 +41,7 @@ class Replica(Process):
     self.slot_out += 1
 
   def body(self):
-    print("Here I am: ", self.me)
+    #print("Here I am: ", self.me)
     while True:
       msg = self.getNextMessage()
       if isinstance(msg, RequestMessage):
